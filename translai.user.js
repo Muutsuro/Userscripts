@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TranslAI
 // @namespace    https://github.com/Muutsuro
-// @version      1.3.0
+// @version      1.4.0
 // @description  -
 // @author       Muutsuro
 // @match        https://www.69shuba.com/book/*.htm
@@ -171,8 +171,10 @@ class Chapter {
                 if (subState) {
                     if (subState === 1) {
                         color = COLOR.GREEN;
-                    } else if (subState === 2) {
+                    } else if (subState === 2 || subState === 4) {
                         color = COLOR.ORANGE;
+                    } else if (subState === 3) {
+                        color = COLOR.BLUE;
                     }
                 }
 
@@ -339,7 +341,24 @@ class NameManager {
             }
         }
 
-        return partial ? 2 : 0;
+        if (partial) {
+            return 2;
+        }
+
+        const checkedNames = this.getNames().filter(n => n.checked && !NameManager.isGlobal(n));
+        partial = false;
+
+        for (const checkedName of checkedNames) {
+            if (checkedName.original.includes(name.original) && checkedName.translated.includes(name.translated)) {
+                return 3;
+            }
+
+            if (checkedName.original.includes(name.original)) {
+                partial = true;
+            }
+        }
+
+        return partial ? 4 : 0;
     }
 }
 
