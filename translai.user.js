@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TranslAI
 // @namespace    https://github.com/Muutsuro
-// @version      1.0.0
+// @version      1.1.0
 // @description  -
 // @author       Muutsuro
 // @match        https://www.69shuba.com/book/*.htm
@@ -11,6 +11,8 @@
 // @grant        GM.setValue
 // @grant        GM.deleteValue
 // @grant        GM.setClipboard
+// @downloadURL  https://github.com/Muutsuro/Userscripts/raw/refs/heads/main/translai.user.js
+// @updateURL    https://github.com/Muutsuro/Userscripts/raw/refs/heads/main/translai.user.js
 // ==/UserScript==
 
 const COLOR = {
@@ -121,6 +123,7 @@ class Chapter {
 
     async translate() {
         if (!this.content) {
+            document.querySelector('.tools')?.remove();
             this.element.querySelector('h1.hide720')?.remove();
             this.element.querySelector('.txtinfo')?.remove();
             this.content = this.element.innerText.trim();
