@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TranslAI
 // @namespace    https://github.com/Muutsuro
-// @version      1.1.0
+// @version      1.2.0
 // @description  -
 // @author       Muutsuro
 // @match        https://www.69shuba.com/book/*.htm
@@ -253,6 +253,7 @@ class NameManager {
             this.globalNames.push(name);
             await this.save();
             Chapter.getInstance().refreshDOM();
+            this.editName(name);
         }
     }
 
@@ -260,8 +261,10 @@ class NameManager {
         return this.globalNames.find(n => n.original === name.original) ? true : false;
     }
 
-    static async editName() {
-        const name = this.getSelectedName();
+    static async editName(name) {
+        if (!name) {
+            name = this.getSelectedName();
+        }
 
         if (!name) {
             return;
@@ -291,6 +294,7 @@ class NameManager {
         name.checked = true;
         await this.save();
         Chapter.getInstance().refreshDOM();
+        this.editName(name);
     }
 
     static async copyName() {
