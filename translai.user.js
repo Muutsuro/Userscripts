@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TranslAI
 // @namespace    https://github.com/Muutsuro
-// @version      1.2.0
+// @version      1.2.1
 // @description  -
 // @author       Muutsuro
 // @match        https://www.69shuba.com/book/*.htm
@@ -262,7 +262,7 @@ class NameManager {
     }
 
     static async editName(name) {
-        if (!name) {
+        if (!name?.original) {
             name = this.getSelectedName();
         }
 
