@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TranslAI
 // @namespace    https://github.com/Muutsuro
-// @version      1.2.1
+// @version      1.3.0
 // @description  -
 // @author       Muutsuro
 // @match        https://www.69shuba.com/book/*.htm
@@ -196,11 +196,12 @@ class NameManager {
     static async init() {
         this.localNames = await GM.getValue(`names:${Novel.id}`) || [];
         this.globalNames = await GM.getValue('names') || [];
+        this.bannedNames = await GM.getValue('bannedNames') || [];
     }
 
     static async addNames(names) {
         for (const name of names) {
-            if (!this.getName(name.original)) {
+            if (!this.getName(name.original) && !this.bannedNames.includes(name.original)) {
                 this.localNames.push(name);
             }
         }
@@ -220,6 +221,7 @@ class NameManager {
     static async save() {
         await GM.setValue(`names:${Novel.id}`, this.localNames);
         await GM.setValue('names', this.globalNames);
+        await GM.setValue('bannedNames', this.bannedNames);
     }
 
     static getSelectedName() {
@@ -313,6 +315,7 @@ class NameManager {
         const globalIndex = this.globalNames.findIndex(n => n.original === name.original);
         if (localIndex !== -1) this.localNames.splice(localIndex, 1);
         if (globalIndex !== -1) this.globalNames.splice(globalIndex, 1);
+        this.bannedNames.push(name.original);
         await this.save();
         Chapter.getInstance().refreshDOM();
     }
